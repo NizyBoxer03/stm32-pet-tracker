@@ -8,5 +8,6 @@
 void SystemInit(void);
 int bitWrite(int*, int, int);
 void blockWrite(int*, int, int);
+void UARTConf(int*);
 
 #endif

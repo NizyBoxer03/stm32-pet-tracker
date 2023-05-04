@@ -5,37 +5,37 @@ Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
   0 .isr_vector   00000130  08000000  08000000  00010000  2**2
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000494  08000130  08000130  00010130  2**2
+  1 .text         000004ac  08000130  08000130  00010130  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .init         00000004  080005c4  080005c4  000105c4  2**2
+  2 .init         00000004  080005dc  080005dc  000105dc  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  3 .fini         00000004  080005c8  080005c8  000105c8  2**2
+  3 .fini         00000004  080005e0  080005e0  000105e0  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  4 .rodata       00000000  080005cc  080005cc  000105cc  2**0
+  4 .rodata       00000000  080005e4  080005e4  000105e4  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  5 .data         00000000  20000000  20000000  000105cc  2**0
+  5 .data         00000000  20000000  20000000  000105e4  2**0
                   CONTENTS, ALLOC, LOAD, DATA
   6 .bss          00000000  20000000  20000000  00000000  2**0
                   ALLOC
-  7 .ARM.attributes 00000029  00000000  00000000  000105cc  2**0
+  7 .ARM.attributes 00000029  00000000  00000000  000105e4  2**0
                   CONTENTS, READONLY
-  8 .comment      0000007b  00000000  00000000  000105f5  2**0
+  8 .comment      0000007b  00000000  00000000  0001060d  2**0
                   CONTENTS, READONLY
-  9 .debug_info   00000792  00000000  00000000  00010670  2**0
+  9 .debug_info   00000792  00000000  00000000  00010688  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_abbrev 0000021d  00000000  00000000  00010e02  2**0
+ 10 .debug_abbrev 0000021d  00000000  00000000  00010e1a  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_aranges 000002a0  00000000  00000000  0001101f  2**0
+ 11 .debug_aranges 000002a0  00000000  00000000  00011037  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000270  00000000  00000000  000112bf  2**0
+ 12 .debug_ranges 00000270  00000000  00000000  000112d7  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_macro  00000fad  00000000  00000000  0001152f  2**0
+ 13 .debug_macro  00000fa1  00000000  00000000  00011547  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_line   00000975  00000000  00000000  000124dc  2**0
+ 14 .debug_line   00000979  00000000  00000000  000124e8  2**0
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_str    00004243  00000000  00000000  00012e51  2**0
+ 15 .debug_str    000041ec  00000000  00000000  00012e61  2**0
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_frame  00000888  00000000  00000000  00017094  2**2
+ 16 .debug_frame  00000888  00000000  00000000  00017050  2**2
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -56,7 +56,7 @@ int main()
  8000136:	2201      	movs	r2, #1
  8000138:	2104      	movs	r1, #4
  800013a:	4812      	ldr	r0, [pc, #72]	; (8000184 <main+0x54>)
- 800013c:	f000 f848 	bl	80001d0 <bitWrite>
+ 800013c:	f000 f838 	bl	80001b0 <bitWrite>
 
 	//Loop
 	while(1)
@@ -66,7 +66,7 @@ int main()
  8000140:	2201      	movs	r2, #1
  8000142:	210d      	movs	r1, #13
  8000144:	4810      	ldr	r0, [pc, #64]	; (8000188 <main+0x58>)
- 8000146:	f000 f843 	bl	80001d0 <bitWrite>
+ 8000146:	f000 f833 	bl	80001b0 <bitWrite>
 
 		for(volatile int i = 0; i < 50000; i++); //delay
  800014a:	2300      	movs	r3, #0
@@ -85,7 +85,7 @@ int main()
  8000160:	2200      	movs	r2, #0
  8000162:	210d      	movs	r1, #13
  8000164:	4808      	ldr	r0, [pc, #32]	; (8000188 <main+0x58>)
- 8000166:	f000 f833 	bl	80001d0 <bitWrite>
+ 8000166:	f000 f823 	bl	80001b0 <bitWrite>
 
 		for(volatile int i = 0; i < 50000; i++); //delay
  800016a:	2300      	movs	r3, #0
@@ -112,740 +112,760 @@ void SystemInit(void)
 {
  800018c:	b580      	push	{r7, lr}
  800018e:	af00      	add	r7, sp, #0
-	RCC_APB2ENR |= (1<<4); //GPIOC
- 8000190:	4b0d      	ldr	r3, [pc, #52]	; (80001c8 <SystemInit+0x3c>)
- 8000192:	681b      	ldr	r3, [r3, #0]
- 8000194:	4a0c      	ldr	r2, [pc, #48]	; (80001c8 <SystemInit+0x3c>)
- 8000196:	f043 0310 	orr.w	r3, r3, #16
- 800019a:	6013      	str	r3, [r2, #0]
-	//bitWrite(RCC_APB2ENR_ptr, 4, 1);
-	//GPIOC_CRH &= ~(0xFF<<20); //CNF13 = 00, MODE13 = 00
+	bitWrite(RCC_APB2ENR_ptr, 4, 1);
+ 8000190:	2201      	movs	r2, #1
+ 8000192:	2104      	movs	r1, #4
+ 8000194:	4804      	ldr	r0, [pc, #16]	; (80001a8 <SystemInit+0x1c>)
+ 8000196:	f000 f80b 	bl	80001b0 <bitWrite>
 	bitWrite(GPIOC_CRH_ptr, 20, 1);
- 800019c:	2201      	movs	r2, #1
- 800019e:	2114      	movs	r1, #20
- 80001a0:	480a      	ldr	r0, [pc, #40]	; (80001cc <SystemInit+0x40>)
- 80001a2:	f000 f815 	bl	80001d0 <bitWrite>
 	bitWrite(GPIOC_CRH_ptr, 21, 1);
- 80001a6:	2201      	movs	r2, #1
- 80001a8:	2115      	movs	r1, #21
- 80001aa:	4808      	ldr	r0, [pc, #32]	; (80001cc <SystemInit+0x40>)
- 80001ac:	f000 f810 	bl	80001d0 <bitWrite>
 	bitWrite(GPIOC_CRH_ptr, 22, 0);
- 80001b0:	2200      	movs	r2, #0
- 80001b2:	2116      	movs	r1, #22
- 80001b4:	4805      	ldr	r0, [pc, #20]	; (80001cc <SystemInit+0x40>)
- 80001b6:	f000 f80b 	bl	80001d0 <bitWrite>
 	bitWrite(GPIOC_CRH_ptr, 23, 0);
- 80001ba:	2200      	movs	r2, #0
- 80001bc:	2117      	movs	r1, #23
- 80001be:	4803      	ldr	r0, [pc, #12]	; (80001cc <SystemInit+0x40>)
- 80001c0:	f000 f806 	bl	80001d0 <bitWrite>
-
+	*/
+	blockWrite(GPIOC_CRH_ptr, 20, 0b1100);
+ 800019a:	220c      	movs	r2, #12
+ 800019c:	2114      	movs	r1, #20
+ 800019e:	4803      	ldr	r0, [pc, #12]	; (80001ac <SystemInit+0x20>)
+ 80001a0:	f000 f833 	bl	800020a <blockWrite>
 }
- 80001c4:	bf00      	nop
- 80001c6:	bd80      	pop	{r7, pc}
- 80001c8:	40021018 	.word	0x40021018
- 80001cc:	40011004 	.word	0x40011004
+ 80001a4:	bf00      	nop
+ 80001a6:	bd80      	pop	{r7, pc}
+ 80001a8:	40021018 	.word	0x40021018
+ 80001ac:	40011004 	.word	0x40011004
 
-080001d0 <bitWrite>:
+080001b0 <bitWrite>:
 
 int bitWrite(int* ADDR, int n_bits, int state)
 {
- 80001d0:	b480      	push	{r7}
- 80001d2:	b087      	sub	sp, #28
- 80001d4:	af00      	add	r7, sp, #0
- 80001d6:	60f8      	str	r0, [r7, #12]
- 80001d8:	60b9      	str	r1, [r7, #8]
- 80001da:	607a      	str	r2, [r7, #4]
+ 80001b0:	b480      	push	{r7}
+ 80001b2:	b087      	sub	sp, #28
+ 80001b4:	af00      	add	r7, sp, #0
+ 80001b6:	60f8      	str	r0, [r7, #12]
+ 80001b8:	60b9      	str	r1, [r7, #8]
+ 80001ba:	607a      	str	r2, [r7, #4]
 	int rValue = VALUE_OK;
- 80001dc:	2300      	movs	r3, #0
- 80001de:	617b      	str	r3, [r7, #20]
+ 80001bc:	2300      	movs	r3, #0
+ 80001be:	617b      	str	r3, [r7, #20]
 
 	switch(state)
- 80001e0:	687b      	ldr	r3, [r7, #4]
- 80001e2:	2b00      	cmp	r3, #0
- 80001e4:	d002      	beq.n	80001ec <bitWrite+0x1c>
- 80001e6:	2b01      	cmp	r3, #1
- 80001e8:	d00b      	beq.n	8000202 <bitWrite+0x32>
- 80001ea:	e014      	b.n	8000216 <bitWrite+0x46>
+ 80001c0:	687b      	ldr	r3, [r7, #4]
+ 80001c2:	2b00      	cmp	r3, #0
+ 80001c4:	d002      	beq.n	80001cc <bitWrite+0x1c>
+ 80001c6:	2b01      	cmp	r3, #1
+ 80001c8:	d00b      	beq.n	80001e2 <bitWrite+0x32>
+ 80001ca:	e014      	b.n	80001f6 <bitWrite+0x46>
 	{
 		case 0:
 			*ADDR &= ~(1<<n_bits);
- 80001ec:	68fb      	ldr	r3, [r7, #12]
- 80001ee:	681a      	ldr	r2, [r3, #0]
- 80001f0:	2101      	movs	r1, #1
- 80001f2:	68bb      	ldr	r3, [r7, #8]
- 80001f4:	fa01 f303 	lsl.w	r3, r1, r3
- 80001f8:	43db      	mvns	r3, r3
- 80001fa:	401a      	ands	r2, r3
- 80001fc:	68fb      	ldr	r3, [r7, #12]
- 80001fe:	601a      	str	r2, [r3, #0]
+ 80001cc:	68fb      	ldr	r3, [r7, #12]
+ 80001ce:	681a      	ldr	r2, [r3, #0]
+ 80001d0:	2101      	movs	r1, #1
+ 80001d2:	68bb      	ldr	r3, [r7, #8]
+ 80001d4:	fa01 f303 	lsl.w	r3, r1, r3
+ 80001d8:	43db      	mvns	r3, r3
+ 80001da:	401a      	ands	r2, r3
+ 80001dc:	68fb      	ldr	r3, [r7, #12]
+ 80001de:	601a      	str	r2, [r3, #0]
 			break;
- 8000200:	e00d      	b.n	800021e <bitWrite+0x4e>
+ 80001e0:	e00d      	b.n	80001fe <bitWrite+0x4e>
 
 		case 1:
 			*ADDR |= (1<<n_bits);
- 8000202:	68fb      	ldr	r3, [r7, #12]
- 8000204:	681a      	ldr	r2, [r3, #0]
- 8000206:	2101      	movs	r1, #1
- 8000208:	68bb      	ldr	r3, [r7, #8]
- 800020a:	fa01 f303 	lsl.w	r3, r1, r3
- 800020e:	431a      	orrs	r2, r3
- 8000210:	68fb      	ldr	r3, [r7, #12]
- 8000212:	601a      	str	r2, [r3, #0]
+ 80001e2:	68fb      	ldr	r3, [r7, #12]
+ 80001e4:	681a      	ldr	r2, [r3, #0]
+ 80001e6:	2101      	movs	r1, #1
+ 80001e8:	68bb      	ldr	r3, [r7, #8]
+ 80001ea:	fa01 f303 	lsl.w	r3, r1, r3
+ 80001ee:	431a      	orrs	r2, r3
+ 80001f0:	68fb      	ldr	r3, [r7, #12]
+ 80001f2:	601a      	str	r2, [r3, #0]
 			break;
- 8000214:	e003      	b.n	800021e <bitWrite+0x4e>
+ 80001f4:	e003      	b.n	80001fe <bitWrite+0x4e>
 
 		default:
 			rValue = VALUE_ERROR;
- 8000216:	f04f 33ff 	mov.w	r3, #4294967295
- 800021a:	617b      	str	r3, [r7, #20]
+ 80001f6:	f04f 33ff 	mov.w	r3, #4294967295
+ 80001fa:	617b      	str	r3, [r7, #20]
 			break;
- 800021c:	bf00      	nop
+ 80001fc:	bf00      	nop
 	}
 
 	return rValue;
- 800021e:	697b      	ldr	r3, [r7, #20]
+ 80001fe:	697b      	ldr	r3, [r7, #20]
 }
- 8000220:	4618      	mov	r0, r3
- 8000222:	371c      	adds	r7, #28
- 8000224:	46bd      	mov	sp, r7
- 8000226:	bc80      	pop	{r7}
- 8000228:	4770      	bx	lr
-	...
+ 8000200:	4618      	mov	r0, r3
+ 8000202:	371c      	adds	r7, #28
+ 8000204:	46bd      	mov	sp, r7
+ 8000206:	bc80      	pop	{r7}
+ 8000208:	4770      	bx	lr
 
-0800022c <Reset_Handler>:
+0800020a <blockWrite>:
+
+void blockWrite(int* ADDR, int shift, int block) //Sin testear xd
+{
+ 800020a:	b480      	push	{r7}
+ 800020c:	b085      	sub	sp, #20
+ 800020e:	af00      	add	r7, sp, #0
+ 8000210:	60f8      	str	r0, [r7, #12]
+ 8000212:	60b9      	str	r1, [r7, #8]
+ 8000214:	607a      	str	r2, [r7, #4]
+	*ADDR |= (block << shift); //escribir 1s
+ 8000216:	68fb      	ldr	r3, [r7, #12]
+ 8000218:	681a      	ldr	r2, [r3, #0]
+ 800021a:	6879      	ldr	r1, [r7, #4]
+ 800021c:	68bb      	ldr	r3, [r7, #8]
+ 800021e:	fa01 f303 	lsl.w	r3, r1, r3
+ 8000222:	431a      	orrs	r2, r3
+ 8000224:	68fb      	ldr	r3, [r7, #12]
+ 8000226:	601a      	str	r2, [r3, #0]
+	*ADDR &= (block << shift); //escribir 0s
+ 8000228:	68fb      	ldr	r3, [r7, #12]
+ 800022a:	681a      	ldr	r2, [r3, #0]
+ 800022c:	6879      	ldr	r1, [r7, #4]
+ 800022e:	68bb      	ldr	r3, [r7, #8]
+ 8000230:	fa01 f303 	lsl.w	r3, r1, r3
+ 8000234:	401a      	ands	r2, r3
+ 8000236:	68fb      	ldr	r3, [r7, #12]
+ 8000238:	601a      	str	r2, [r3, #0]
+}
+ 800023a:	bf00      	nop
+ 800023c:	3714      	adds	r7, #20
+ 800023e:	46bd      	mov	sp, r7
+ 8000240:	bc80      	pop	{r7}
+ 8000242:	4770      	bx	lr
+
+08000244 <Reset_Handler>:
 
 void Reset_Handler(void);
 
 //implemento reset handler
 void Reset_Handler(void)
 {
- 800022c:	b580      	push	{r7, lr}
- 800022e:	b084      	sub	sp, #16
- 8000230:	af00      	add	r7, sp, #0
+ 8000244:	b580      	push	{r7, lr}
+ 8000246:	b084      	sub	sp, #16
+ 8000248:	af00      	add	r7, sp, #0
 	uint32_t *datalnit = &_sidata;
- 8000232:	4b11      	ldr	r3, [pc, #68]	; (8000278 <Reset_Handler+0x4c>)
- 8000234:	60fb      	str	r3, [r7, #12]
+ 800024a:	4b11      	ldr	r3, [pc, #68]	; (8000290 <Reset_Handler+0x4c>)
+ 800024c:	60fb      	str	r3, [r7, #12]
     uint32_t *data = &_sdata;
- 8000236:	4b11      	ldr	r3, [pc, #68]	; (800027c <Reset_Handler+0x50>)
- 8000238:	60bb      	str	r3, [r7, #8]
+ 800024e:	4b11      	ldr	r3, [pc, #68]	; (8000294 <Reset_Handler+0x50>)
+ 8000250:	60bb      	str	r3, [r7, #8]
 	while(data < &_edata) {
- 800023a:	e007      	b.n	800024c <Reset_Handler+0x20>
+ 8000252:	e007      	b.n	8000264 <Reset_Handler+0x20>
 		*data++ = *datalnit++;
- 800023c:	68fa      	ldr	r2, [r7, #12]
- 800023e:	1d13      	adds	r3, r2, #4
- 8000240:	60fb      	str	r3, [r7, #12]
- 8000242:	68bb      	ldr	r3, [r7, #8]
- 8000244:	1d19      	adds	r1, r3, #4
- 8000246:	60b9      	str	r1, [r7, #8]
- 8000248:	6812      	ldr	r2, [r2, #0]
- 800024a:	601a      	str	r2, [r3, #0]
+ 8000254:	68fa      	ldr	r2, [r7, #12]
+ 8000256:	1d13      	adds	r3, r2, #4
+ 8000258:	60fb      	str	r3, [r7, #12]
+ 800025a:	68bb      	ldr	r3, [r7, #8]
+ 800025c:	1d19      	adds	r1, r3, #4
+ 800025e:	60b9      	str	r1, [r7, #8]
+ 8000260:	6812      	ldr	r2, [r2, #0]
+ 8000262:	601a      	str	r2, [r3, #0]
 	while(data < &_edata) {
- 800024c:	68bb      	ldr	r3, [r7, #8]
- 800024e:	4a0c      	ldr	r2, [pc, #48]	; (8000280 <Reset_Handler+0x54>)
- 8000250:	4293      	cmp	r3, r2
- 8000252:	d3f3      	bcc.n	800023c <Reset_Handler+0x10>
+ 8000264:	68bb      	ldr	r3, [r7, #8]
+ 8000266:	4a0c      	ldr	r2, [pc, #48]	; (8000298 <Reset_Handler+0x54>)
+ 8000268:	4293      	cmp	r3, r2
+ 800026a:	d3f3      	bcc.n	8000254 <Reset_Handler+0x10>
 	}
 	
 	uint32_t *bss = &_sbss;
- 8000254:	4b0b      	ldr	r3, [pc, #44]	; (8000284 <Reset_Handler+0x58>)
- 8000256:	607b      	str	r3, [r7, #4]
+ 800026c:	4b0b      	ldr	r3, [pc, #44]	; (800029c <Reset_Handler+0x58>)
+ 800026e:	607b      	str	r3, [r7, #4]
 	while(bss < &_ebss) {
- 8000258:	e004      	b.n	8000264 <Reset_Handler+0x38>
+ 8000270:	e004      	b.n	800027c <Reset_Handler+0x38>
 		*bss++ = 0;
- 800025a:	687b      	ldr	r3, [r7, #4]
- 800025c:	1d1a      	adds	r2, r3, #4
- 800025e:	607a      	str	r2, [r7, #4]
- 8000260:	2200      	movs	r2, #0
- 8000262:	601a      	str	r2, [r3, #0]
+ 8000272:	687b      	ldr	r3, [r7, #4]
+ 8000274:	1d1a      	adds	r2, r3, #4
+ 8000276:	607a      	str	r2, [r7, #4]
+ 8000278:	2200      	movs	r2, #0
+ 800027a:	601a      	str	r2, [r3, #0]
 	while(bss < &_ebss) {
- 8000264:	687b      	ldr	r3, [r7, #4]
- 8000266:	4a08      	ldr	r2, [pc, #32]	; (8000288 <Reset_Handler+0x5c>)
- 8000268:	4293      	cmp	r3, r2
- 800026a:	d3f6      	bcc.n	800025a <Reset_Handler+0x2e>
+ 800027c:	687b      	ldr	r3, [r7, #4]
+ 800027e:	4a08      	ldr	r2, [pc, #32]	; (80002a0 <Reset_Handler+0x5c>)
+ 8000280:	4293      	cmp	r3, r2
+ 8000282:	d3f6      	bcc.n	8000272 <Reset_Handler+0x2e>
 	}
 	
 	SystemInit();
- 800026c:	f7ff ff8e 	bl	800018c <SystemInit>
+ 8000284:	f7ff ff82 	bl	800018c <SystemInit>
 
 	//finalmente, llamo a main
 	main();
- 8000270:	f7ff ff5e 	bl	8000130 <main>
+ 8000288:	f7ff ff52 	bl	8000130 <main>
 	
 	while(1);
- 8000274:	e7fe      	b.n	8000274 <Reset_Handler+0x48>
- 8000276:	bf00      	nop
- 8000278:	080005cc 	.word	0x080005cc
- 800027c:	20000000 	.word	0x20000000
- 8000280:	20000000 	.word	0x20000000
- 8000284:	20000000 	.word	0x20000000
- 8000288:	20000000 	.word	0x20000000
+ 800028c:	e7fe      	b.n	800028c <Reset_Handler+0x48>
+ 800028e:	bf00      	nop
+ 8000290:	080005e4 	.word	0x080005e4
+ 8000294:	20000000 	.word	0x20000000
+ 8000298:	20000000 	.word	0x20000000
+ 800029c:	20000000 	.word	0x20000000
+ 80002a0:	20000000 	.word	0x20000000
 
-0800028c <Default_Handler>:
+080002a4 <Default_Handler>:
 }
 
 void Default_Handler(void) {
- 800028c:	b480      	push	{r7}
- 800028e:	af00      	add	r7, sp, #0
+ 80002a4:	b480      	push	{r7}
+ 80002a6:	af00      	add	r7, sp, #0
     while(1);
- 8000290:	e7fe      	b.n	8000290 <Default_Handler+0x4>
+ 80002a8:	e7fe      	b.n	80002a8 <Default_Handler+0x4>
 
-08000292 <NMI_Handler>:
+080002aa <NMI_Handler>:
 }
 
 __attribute__((weak)) void NMI_Handler (void) { Default_Handler(); }
- 8000292:	b580      	push	{r7, lr}
- 8000294:	af00      	add	r7, sp, #0
- 8000296:	f7ff fff9 	bl	800028c <Default_Handler>
- 800029a:	bf00      	nop
- 800029c:	bd80      	pop	{r7, pc}
-
-0800029e <HardFault_Handler>:
-__attribute__((weak)) void HardFault_Handler (void) { Default_Handler(); }
- 800029e:	b580      	push	{r7, lr}
- 80002a0:	af00      	add	r7, sp, #0
- 80002a2:	f7ff fff3 	bl	800028c <Default_Handler>
- 80002a6:	bf00      	nop
- 80002a8:	bd80      	pop	{r7, pc}
-
-080002aa <MemManage_Handler>:
-__attribute__((weak)) void MemManage_Handler (void) { Default_Handler(); }
  80002aa:	b580      	push	{r7, lr}
  80002ac:	af00      	add	r7, sp, #0
- 80002ae:	f7ff ffed 	bl	800028c <Default_Handler>
+ 80002ae:	f7ff fff9 	bl	80002a4 <Default_Handler>
  80002b2:	bf00      	nop
  80002b4:	bd80      	pop	{r7, pc}
 
-080002b6 <BusFault_Handler>:
-__attribute__((weak)) void BusFault_Handler (void) { Default_Handler(); }
+080002b6 <HardFault_Handler>:
+__attribute__((weak)) void HardFault_Handler (void) { Default_Handler(); }
  80002b6:	b580      	push	{r7, lr}
  80002b8:	af00      	add	r7, sp, #0
- 80002ba:	f7ff ffe7 	bl	800028c <Default_Handler>
+ 80002ba:	f7ff fff3 	bl	80002a4 <Default_Handler>
  80002be:	bf00      	nop
  80002c0:	bd80      	pop	{r7, pc}
 
-080002c2 <UsageFault_Handler>:
-__attribute__((weak)) void UsageFault_Handler (void) { Default_Handler(); }
+080002c2 <MemManage_Handler>:
+__attribute__((weak)) void MemManage_Handler (void) { Default_Handler(); }
  80002c2:	b580      	push	{r7, lr}
  80002c4:	af00      	add	r7, sp, #0
- 80002c6:	f7ff ffe1 	bl	800028c <Default_Handler>
+ 80002c6:	f7ff ffed 	bl	80002a4 <Default_Handler>
  80002ca:	bf00      	nop
  80002cc:	bd80      	pop	{r7, pc}
 
-080002ce <SVC_Handler>:
-__attribute__((weak)) void SVC_Handler (void) { Default_Handler(); }
+080002ce <BusFault_Handler>:
+__attribute__((weak)) void BusFault_Handler (void) { Default_Handler(); }
  80002ce:	b580      	push	{r7, lr}
  80002d0:	af00      	add	r7, sp, #0
- 80002d2:	f7ff ffdb 	bl	800028c <Default_Handler>
+ 80002d2:	f7ff ffe7 	bl	80002a4 <Default_Handler>
  80002d6:	bf00      	nop
  80002d8:	bd80      	pop	{r7, pc}
 
-080002da <DebugMon_Handler>:
-__attribute__((weak)) void DebugMon_Handler (void) { Default_Handler(); }
+080002da <UsageFault_Handler>:
+__attribute__((weak)) void UsageFault_Handler (void) { Default_Handler(); }
  80002da:	b580      	push	{r7, lr}
  80002dc:	af00      	add	r7, sp, #0
- 80002de:	f7ff ffd5 	bl	800028c <Default_Handler>
+ 80002de:	f7ff ffe1 	bl	80002a4 <Default_Handler>
  80002e2:	bf00      	nop
  80002e4:	bd80      	pop	{r7, pc}
 
-080002e6 <PendSV_Handler>:
-__attribute__((weak)) void PendSV_Handler (void) { Default_Handler(); }
+080002e6 <SVC_Handler>:
+__attribute__((weak)) void SVC_Handler (void) { Default_Handler(); }
  80002e6:	b580      	push	{r7, lr}
  80002e8:	af00      	add	r7, sp, #0
- 80002ea:	f7ff ffcf 	bl	800028c <Default_Handler>
+ 80002ea:	f7ff ffdb 	bl	80002a4 <Default_Handler>
  80002ee:	bf00      	nop
  80002f0:	bd80      	pop	{r7, pc}
 
-080002f2 <SysTick_Handler>:
-__attribute__((weak)) void SysTick_Handler (void) { Default_Handler(); }
+080002f2 <DebugMon_Handler>:
+__attribute__((weak)) void DebugMon_Handler (void) { Default_Handler(); }
  80002f2:	b580      	push	{r7, lr}
  80002f4:	af00      	add	r7, sp, #0
- 80002f6:	f7ff ffc9 	bl	800028c <Default_Handler>
+ 80002f6:	f7ff ffd5 	bl	80002a4 <Default_Handler>
  80002fa:	bf00      	nop
  80002fc:	bd80      	pop	{r7, pc}
 
-080002fe <WWDG_IRQHandler>:
-__attribute__((weak)) void WWDG_IRQHandler (void) { Default_Handler(); }          			/* Window Watchdog interrupt                        */
+080002fe <PendSV_Handler>:
+__attribute__((weak)) void PendSV_Handler (void) { Default_Handler(); }
  80002fe:	b580      	push	{r7, lr}
  8000300:	af00      	add	r7, sp, #0
- 8000302:	f7ff ffc3 	bl	800028c <Default_Handler>
+ 8000302:	f7ff ffcf 	bl	80002a4 <Default_Handler>
  8000306:	bf00      	nop
  8000308:	bd80      	pop	{r7, pc}
 
-0800030a <PVD_IRQHandler>:
-__attribute__((weak)) void PVD_IRQHandler (void) { Default_Handler(); }          			/* PVD through EXTI line detection interrupt        */
+0800030a <SysTick_Handler>:
+__attribute__((weak)) void SysTick_Handler (void) { Default_Handler(); }
  800030a:	b580      	push	{r7, lr}
  800030c:	af00      	add	r7, sp, #0
- 800030e:	f7ff ffbd 	bl	800028c <Default_Handler>
+ 800030e:	f7ff ffc9 	bl	80002a4 <Default_Handler>
  8000312:	bf00      	nop
  8000314:	bd80      	pop	{r7, pc}
 
-08000316 <TAMPER_IRQHandler>:
-__attribute__((weak)) void TAMPER_IRQHandler (void) { Default_Handler(); }       			/* Tamper interrupt                                 */
+08000316 <WWDG_IRQHandler>:
+__attribute__((weak)) void WWDG_IRQHandler (void) { Default_Handler(); }          			/* Window Watchdog interrupt                        */
  8000316:	b580      	push	{r7, lr}
  8000318:	af00      	add	r7, sp, #0
- 800031a:	f7ff ffb7 	bl	800028c <Default_Handler>
+ 800031a:	f7ff ffc3 	bl	80002a4 <Default_Handler>
  800031e:	bf00      	nop
  8000320:	bd80      	pop	{r7, pc}
 
-08000322 <RTC_IRQHandler>:
-__attribute__((weak)) void RTC_IRQHandler (void) { Default_Handler(); }          			/* RTC global interrupt                             */
+08000322 <PVD_IRQHandler>:
+__attribute__((weak)) void PVD_IRQHandler (void) { Default_Handler(); }          			/* PVD through EXTI line detection interrupt        */
  8000322:	b580      	push	{r7, lr}
  8000324:	af00      	add	r7, sp, #0
- 8000326:	f7ff ffb1 	bl	800028c <Default_Handler>
+ 8000326:	f7ff ffbd 	bl	80002a4 <Default_Handler>
  800032a:	bf00      	nop
  800032c:	bd80      	pop	{r7, pc}
 
-0800032e <FLASH_IRQHandler>:
-__attribute__((weak)) void FLASH_IRQHandler (void) { Default_Handler(); }        			/* Flash global interrupt                           */
+0800032e <TAMPER_IRQHandler>:
+__attribute__((weak)) void TAMPER_IRQHandler (void) { Default_Handler(); }       			/* Tamper interrupt                                 */
  800032e:	b580      	push	{r7, lr}
  8000330:	af00      	add	r7, sp, #0
- 8000332:	f7ff ffab 	bl	800028c <Default_Handler>
+ 8000332:	f7ff ffb7 	bl	80002a4 <Default_Handler>
  8000336:	bf00      	nop
  8000338:	bd80      	pop	{r7, pc}
 
-0800033a <RCC_IRQHandler>:
-__attribute__((weak)) void RCC_IRQHandler (void) { Default_Handler(); }          			/* RCC global interrupt                             */
+0800033a <RTC_IRQHandler>:
+__attribute__((weak)) void RTC_IRQHandler (void) { Default_Handler(); }          			/* RTC global interrupt                             */
  800033a:	b580      	push	{r7, lr}
  800033c:	af00      	add	r7, sp, #0
- 800033e:	f7ff ffa5 	bl	800028c <Default_Handler>
+ 800033e:	f7ff ffb1 	bl	80002a4 <Default_Handler>
  8000342:	bf00      	nop
  8000344:	bd80      	pop	{r7, pc}
 
-08000346 <EXTI0_IRQHandler>:
-__attribute__((weak)) void EXTI0_IRQHandler (void) { Default_Handler(); }        			/* EXTI Line0 interrupt                             */
+08000346 <FLASH_IRQHandler>:
+__attribute__((weak)) void FLASH_IRQHandler (void) { Default_Handler(); }        			/* Flash global interrupt                           */
  8000346:	b580      	push	{r7, lr}
  8000348:	af00      	add	r7, sp, #0
- 800034a:	f7ff ff9f 	bl	800028c <Default_Handler>
+ 800034a:	f7ff ffab 	bl	80002a4 <Default_Handler>
  800034e:	bf00      	nop
  8000350:	bd80      	pop	{r7, pc}
 
-08000352 <EXTI1_IRQHandler>:
-__attribute__((weak)) void EXTI1_IRQHandler (void) { Default_Handler(); }        			/* EXTI Line1 interrupt                             */
+08000352 <RCC_IRQHandler>:
+__attribute__((weak)) void RCC_IRQHandler (void) { Default_Handler(); }          			/* RCC global interrupt                             */
  8000352:	b580      	push	{r7, lr}
  8000354:	af00      	add	r7, sp, #0
- 8000356:	f7ff ff99 	bl	800028c <Default_Handler>
+ 8000356:	f7ff ffa5 	bl	80002a4 <Default_Handler>
  800035a:	bf00      	nop
  800035c:	bd80      	pop	{r7, pc}
 
-0800035e <EXTI2_IRQHandler>:
-__attribute__((weak)) void EXTI2_IRQHandler (void) { Default_Handler(); }        			/* EXTI Line2 interrupt                             */
+0800035e <EXTI0_IRQHandler>:
+__attribute__((weak)) void EXTI0_IRQHandler (void) { Default_Handler(); }        			/* EXTI Line0 interrupt                             */
  800035e:	b580      	push	{r7, lr}
  8000360:	af00      	add	r7, sp, #0
- 8000362:	f7ff ff93 	bl	800028c <Default_Handler>
+ 8000362:	f7ff ff9f 	bl	80002a4 <Default_Handler>
  8000366:	bf00      	nop
  8000368:	bd80      	pop	{r7, pc}
 
-0800036a <EXTI3_IRQHandler>:
-__attribute__((weak)) void EXTI3_IRQHandler (void) { Default_Handler(); }        			/* EXTI Line3 interrupt                             */
+0800036a <EXTI1_IRQHandler>:
+__attribute__((weak)) void EXTI1_IRQHandler (void) { Default_Handler(); }        			/* EXTI Line1 interrupt                             */
  800036a:	b580      	push	{r7, lr}
  800036c:	af00      	add	r7, sp, #0
- 800036e:	f7ff ff8d 	bl	800028c <Default_Handler>
+ 800036e:	f7ff ff99 	bl	80002a4 <Default_Handler>
  8000372:	bf00      	nop
  8000374:	bd80      	pop	{r7, pc}
 
-08000376 <EXTI4_IRQHandler>:
-__attribute__((weak)) void EXTI4_IRQHandler (void) { Default_Handler(); }        			/* EXTI Line4 interrupt                             */
+08000376 <EXTI2_IRQHandler>:
+__attribute__((weak)) void EXTI2_IRQHandler (void) { Default_Handler(); }        			/* EXTI Line2 interrupt                             */
  8000376:	b580      	push	{r7, lr}
  8000378:	af00      	add	r7, sp, #0
- 800037a:	f7ff ff87 	bl	800028c <Default_Handler>
+ 800037a:	f7ff ff93 	bl	80002a4 <Default_Handler>
  800037e:	bf00      	nop
  8000380:	bd80      	pop	{r7, pc}
 
-08000382 <DMA1_Channel1_IRQHandler>:
-__attribute__((weak)) void DMA1_Channel1_IRQHandler (void) { Default_Handler(); } 			/* DMA1 Channel1 global interrupt                   */
+08000382 <EXTI3_IRQHandler>:
+__attribute__((weak)) void EXTI3_IRQHandler (void) { Default_Handler(); }        			/* EXTI Line3 interrupt                             */
  8000382:	b580      	push	{r7, lr}
  8000384:	af00      	add	r7, sp, #0
- 8000386:	f7ff ff81 	bl	800028c <Default_Handler>
+ 8000386:	f7ff ff8d 	bl	80002a4 <Default_Handler>
  800038a:	bf00      	nop
  800038c:	bd80      	pop	{r7, pc}
 
-0800038e <DMA1_Channel2_IRQHandler>:
-__attribute__((weak)) void DMA1_Channel2_IRQHandler (void) { Default_Handler(); } 			/* DMA1 Channel2 global interrupt                   */
+0800038e <EXTI4_IRQHandler>:
+__attribute__((weak)) void EXTI4_IRQHandler (void) { Default_Handler(); }        			/* EXTI Line4 interrupt                             */
  800038e:	b580      	push	{r7, lr}
  8000390:	af00      	add	r7, sp, #0
- 8000392:	f7ff ff7b 	bl	800028c <Default_Handler>
+ 8000392:	f7ff ff87 	bl	80002a4 <Default_Handler>
  8000396:	bf00      	nop
  8000398:	bd80      	pop	{r7, pc}
 
-0800039a <DMA1_Channel3_IRQHandler>:
-__attribute__((weak)) void DMA1_Channel3_IRQHandler (void) { Default_Handler(); }			/* DMA1 Channel3 global interrupt                   */
+0800039a <DMA1_Channel1_IRQHandler>:
+__attribute__((weak)) void DMA1_Channel1_IRQHandler (void) { Default_Handler(); } 			/* DMA1 Channel1 global interrupt                   */
  800039a:	b580      	push	{r7, lr}
  800039c:	af00      	add	r7, sp, #0
- 800039e:	f7ff ff75 	bl	800028c <Default_Handler>
+ 800039e:	f7ff ff81 	bl	80002a4 <Default_Handler>
  80003a2:	bf00      	nop
  80003a4:	bd80      	pop	{r7, pc}
 
-080003a6 <DMA1_Channel4_IRQHandler>:
-__attribute__((weak)) void DMA1_Channel4_IRQHandler (void) { Default_Handler(); }			/* DMA1 Channel4 global interrupt                   */
+080003a6 <DMA1_Channel2_IRQHandler>:
+__attribute__((weak)) void DMA1_Channel2_IRQHandler (void) { Default_Handler(); } 			/* DMA1 Channel2 global interrupt                   */
  80003a6:	b580      	push	{r7, lr}
  80003a8:	af00      	add	r7, sp, #0
- 80003aa:	f7ff ff6f 	bl	800028c <Default_Handler>
+ 80003aa:	f7ff ff7b 	bl	80002a4 <Default_Handler>
  80003ae:	bf00      	nop
  80003b0:	bd80      	pop	{r7, pc}
 
-080003b2 <DMA1_Channel5_IRQHandler>:
-__attribute__((weak)) void DMA1_Channel5_IRQHandler (void) { Default_Handler(); }			/* DMA1 Channel5 global interrupt                   */
+080003b2 <DMA1_Channel3_IRQHandler>:
+__attribute__((weak)) void DMA1_Channel3_IRQHandler (void) { Default_Handler(); }			/* DMA1 Channel3 global interrupt                   */
  80003b2:	b580      	push	{r7, lr}
  80003b4:	af00      	add	r7, sp, #0
- 80003b6:	f7ff ff69 	bl	800028c <Default_Handler>
+ 80003b6:	f7ff ff75 	bl	80002a4 <Default_Handler>
  80003ba:	bf00      	nop
  80003bc:	bd80      	pop	{r7, pc}
 
-080003be <DMA1_Channel6_IRQHandler>:
-__attribute__((weak)) void DMA1_Channel6_IRQHandler (void) { Default_Handler(); }			/* DMA1 Channel6 global interrupt                   */
+080003be <DMA1_Channel4_IRQHandler>:
+__attribute__((weak)) void DMA1_Channel4_IRQHandler (void) { Default_Handler(); }			/* DMA1 Channel4 global interrupt                   */
  80003be:	b580      	push	{r7, lr}
  80003c0:	af00      	add	r7, sp, #0
- 80003c2:	f7ff ff63 	bl	800028c <Default_Handler>
+ 80003c2:	f7ff ff6f 	bl	80002a4 <Default_Handler>
  80003c6:	bf00      	nop
  80003c8:	bd80      	pop	{r7, pc}
 
-080003ca <DMA1_Channel7_IRQHandler>:
-__attribute__((weak)) void DMA1_Channel7_IRQHandler (void) { Default_Handler(); }			/* DMA1 Channel7 global interrupt                   */
+080003ca <DMA1_Channel5_IRQHandler>:
+__attribute__((weak)) void DMA1_Channel5_IRQHandler (void) { Default_Handler(); }			/* DMA1 Channel5 global interrupt                   */
  80003ca:	b580      	push	{r7, lr}
  80003cc:	af00      	add	r7, sp, #0
- 80003ce:	f7ff ff5d 	bl	800028c <Default_Handler>
+ 80003ce:	f7ff ff69 	bl	80002a4 <Default_Handler>
  80003d2:	bf00      	nop
  80003d4:	bd80      	pop	{r7, pc}
 
-080003d6 <ADC1_2_IRQHandler>:
-__attribute__((weak)) void ADC1_2_IRQHandler (void) { Default_Handler(); }       			/* ADC1 and ADC2 global interrupt                   */
+080003d6 <DMA1_Channel6_IRQHandler>:
+__attribute__((weak)) void DMA1_Channel6_IRQHandler (void) { Default_Handler(); }			/* DMA1 Channel6 global interrupt                   */
  80003d6:	b580      	push	{r7, lr}
  80003d8:	af00      	add	r7, sp, #0
- 80003da:	f7ff ff57 	bl	800028c <Default_Handler>
+ 80003da:	f7ff ff63 	bl	80002a4 <Default_Handler>
  80003de:	bf00      	nop
  80003e0:	bd80      	pop	{r7, pc}
 
-080003e2 <USB_HP_CAN_TX_IRQHandler>:
-__attribute__((weak)) void USB_HP_CAN_TX_IRQHandler (void) { Default_Handler(); }			/* USB High Priority or CAN TX interrupts           */
+080003e2 <DMA1_Channel7_IRQHandler>:
+__attribute__((weak)) void DMA1_Channel7_IRQHandler (void) { Default_Handler(); }			/* DMA1 Channel7 global interrupt                   */
  80003e2:	b580      	push	{r7, lr}
  80003e4:	af00      	add	r7, sp, #0
- 80003e6:	f7ff ff51 	bl	800028c <Default_Handler>
+ 80003e6:	f7ff ff5d 	bl	80002a4 <Default_Handler>
  80003ea:	bf00      	nop
  80003ec:	bd80      	pop	{r7, pc}
 
-080003ee <USB_LP_CAN_RX0_IRQHandler>:
-__attribute__((weak)) void USB_LP_CAN_RX0_IRQHandler (void) { Default_Handler(); }			/* USB Low Priority or CAN RX0 interrupts           */
+080003ee <ADC1_2_IRQHandler>:
+__attribute__((weak)) void ADC1_2_IRQHandler (void) { Default_Handler(); }       			/* ADC1 and ADC2 global interrupt                   */
  80003ee:	b580      	push	{r7, lr}
  80003f0:	af00      	add	r7, sp, #0
- 80003f2:	f7ff ff4b 	bl	800028c <Default_Handler>
+ 80003f2:	f7ff ff57 	bl	80002a4 <Default_Handler>
  80003f6:	bf00      	nop
  80003f8:	bd80      	pop	{r7, pc}
 
-080003fa <CAN_RX1_IRQHandler>:
-__attribute__((weak)) void CAN_RX1_IRQHandler (void) { Default_Handler(); }      			/* CAN RX1 interrupt                                */
+080003fa <USB_HP_CAN_TX_IRQHandler>:
+__attribute__((weak)) void USB_HP_CAN_TX_IRQHandler (void) { Default_Handler(); }			/* USB High Priority or CAN TX interrupts           */
  80003fa:	b580      	push	{r7, lr}
  80003fc:	af00      	add	r7, sp, #0
- 80003fe:	f7ff ff45 	bl	800028c <Default_Handler>
+ 80003fe:	f7ff ff51 	bl	80002a4 <Default_Handler>
  8000402:	bf00      	nop
  8000404:	bd80      	pop	{r7, pc}
 
-08000406 <CAN_SCE_IRQHandler>:
-__attribute__((weak)) void CAN_SCE_IRQHandler (void) { Default_Handler(); }      			/* CAN SCE interrupt                                */
+08000406 <USB_LP_CAN_RX0_IRQHandler>:
+__attribute__((weak)) void USB_LP_CAN_RX0_IRQHandler (void) { Default_Handler(); }			/* USB Low Priority or CAN RX0 interrupts           */
  8000406:	b580      	push	{r7, lr}
  8000408:	af00      	add	r7, sp, #0
- 800040a:	f7ff ff3f 	bl	800028c <Default_Handler>
+ 800040a:	f7ff ff4b 	bl	80002a4 <Default_Handler>
  800040e:	bf00      	nop
  8000410:	bd80      	pop	{r7, pc}
 
-08000412 <EXTI9_5_IRQHandler>:
-__attribute__((weak)) void EXTI9_5_IRQHandler (void) { Default_Handler(); }      			/* EXTI Line[9:5] interrupts                        */
+08000412 <CAN_RX1_IRQHandler>:
+__attribute__((weak)) void CAN_RX1_IRQHandler (void) { Default_Handler(); }      			/* CAN RX1 interrupt                                */
  8000412:	b580      	push	{r7, lr}
  8000414:	af00      	add	r7, sp, #0
- 8000416:	f7ff ff39 	bl	800028c <Default_Handler>
+ 8000416:	f7ff ff45 	bl	80002a4 <Default_Handler>
  800041a:	bf00      	nop
  800041c:	bd80      	pop	{r7, pc}
 
-0800041e <TIM1_BRK_IRQHandler>:
-__attribute__((weak)) void TIM1_BRK_IRQHandler (void) { Default_Handler(); }     			/* TIM1 Break interrupt                             */
+0800041e <CAN_SCE_IRQHandler>:
+__attribute__((weak)) void CAN_SCE_IRQHandler (void) { Default_Handler(); }      			/* CAN SCE interrupt                                */
  800041e:	b580      	push	{r7, lr}
  8000420:	af00      	add	r7, sp, #0
- 8000422:	f7ff ff33 	bl	800028c <Default_Handler>
+ 8000422:	f7ff ff3f 	bl	80002a4 <Default_Handler>
  8000426:	bf00      	nop
  8000428:	bd80      	pop	{r7, pc}
 
-0800042a <TIM1_UP_IRQHandler>:
-__attribute__((weak)) void TIM1_UP_IRQHandler (void) { Default_Handler(); }      			/* TIM1 Update interrupt                            */
+0800042a <EXTI9_5_IRQHandler>:
+__attribute__((weak)) void EXTI9_5_IRQHandler (void) { Default_Handler(); }      			/* EXTI Line[9:5] interrupts                        */
  800042a:	b580      	push	{r7, lr}
  800042c:	af00      	add	r7, sp, #0
- 800042e:	f7ff ff2d 	bl	800028c <Default_Handler>
+ 800042e:	f7ff ff39 	bl	80002a4 <Default_Handler>
  8000432:	bf00      	nop
  8000434:	bd80      	pop	{r7, pc}
 
-08000436 <TIM1_TRG_COM_IRQHandler>:
-__attribute__((weak)) void TIM1_TRG_COM_IRQHandler (void) { Default_Handler(); }  			/* TIM1 Trigger and Commutation interrupts          */
+08000436 <TIM1_BRK_IRQHandler>:
+__attribute__((weak)) void TIM1_BRK_IRQHandler (void) { Default_Handler(); }     			/* TIM1 Break interrupt                             */
  8000436:	b580      	push	{r7, lr}
  8000438:	af00      	add	r7, sp, #0
- 800043a:	f7ff ff27 	bl	800028c <Default_Handler>
+ 800043a:	f7ff ff33 	bl	80002a4 <Default_Handler>
  800043e:	bf00      	nop
  8000440:	bd80      	pop	{r7, pc}
 
-08000442 <TIM1_CC_IRQHandler>:
-__attribute__((weak)) void TIM1_CC_IRQHandler (void) { Default_Handler(); }       			/* TIM1 Capture Compare interrupt                   */
+08000442 <TIM1_UP_IRQHandler>:
+__attribute__((weak)) void TIM1_UP_IRQHandler (void) { Default_Handler(); }      			/* TIM1 Update interrupt                            */
  8000442:	b580      	push	{r7, lr}
  8000444:	af00      	add	r7, sp, #0
- 8000446:	f7ff ff21 	bl	800028c <Default_Handler>
+ 8000446:	f7ff ff2d 	bl	80002a4 <Default_Handler>
  800044a:	bf00      	nop
  800044c:	bd80      	pop	{r7, pc}
 
-0800044e <TIM2_IRQHandler>:
-__attribute__((weak)) void TIM2_IRQHandler (void) { Default_Handler(); }          			/* TIM2 global interrupt                            */
+0800044e <TIM1_TRG_COM_IRQHandler>:
+__attribute__((weak)) void TIM1_TRG_COM_IRQHandler (void) { Default_Handler(); }  			/* TIM1 Trigger and Commutation interrupts          */
  800044e:	b580      	push	{r7, lr}
  8000450:	af00      	add	r7, sp, #0
- 8000452:	f7ff ff1b 	bl	800028c <Default_Handler>
+ 8000452:	f7ff ff27 	bl	80002a4 <Default_Handler>
  8000456:	bf00      	nop
  8000458:	bd80      	pop	{r7, pc}
 
-0800045a <TIM3_IRQHandler>:
-__attribute__((weak)) void TIM3_IRQHandler (void) { Default_Handler(); }         			/* TIM3 global interrupt                            */
+0800045a <TIM1_CC_IRQHandler>:
+__attribute__((weak)) void TIM1_CC_IRQHandler (void) { Default_Handler(); }       			/* TIM1 Capture Compare interrupt                   */
  800045a:	b580      	push	{r7, lr}
  800045c:	af00      	add	r7, sp, #0
- 800045e:	f7ff ff15 	bl	800028c <Default_Handler>
+ 800045e:	f7ff ff21 	bl	80002a4 <Default_Handler>
  8000462:	bf00      	nop
  8000464:	bd80      	pop	{r7, pc}
 
-08000466 <TIM4_IRQHandler>:
-__attribute__((weak)) void TIM4_IRQHandler (void) { Default_Handler(); }        	    	/* TIM4 global interrupt                            */
+08000466 <TIM2_IRQHandler>:
+__attribute__((weak)) void TIM2_IRQHandler (void) { Default_Handler(); }          			/* TIM2 global interrupt                            */
  8000466:	b580      	push	{r7, lr}
  8000468:	af00      	add	r7, sp, #0
- 800046a:	f7ff ff0f 	bl	800028c <Default_Handler>
+ 800046a:	f7ff ff1b 	bl	80002a4 <Default_Handler>
  800046e:	bf00      	nop
  8000470:	bd80      	pop	{r7, pc}
 
-08000472 <I2C1_EV_IRQHandler>:
-__attribute__((weak)) void I2C1_EV_IRQHandler (void) { Default_Handler(); }      			/* I2C1 event interrupt                             */
+08000472 <TIM3_IRQHandler>:
+__attribute__((weak)) void TIM3_IRQHandler (void) { Default_Handler(); }         			/* TIM3 global interrupt                            */
  8000472:	b580      	push	{r7, lr}
  8000474:	af00      	add	r7, sp, #0
- 8000476:	f7ff ff09 	bl	800028c <Default_Handler>
+ 8000476:	f7ff ff15 	bl	80002a4 <Default_Handler>
  800047a:	bf00      	nop
  800047c:	bd80      	pop	{r7, pc}
 
-0800047e <I2C1_ER_IRQHandler>:
-__attribute__((weak)) void I2C1_ER_IRQHandler (void) { Default_Handler(); }      			/* I2C1 error interrupt                             */
+0800047e <TIM4_IRQHandler>:
+__attribute__((weak)) void TIM4_IRQHandler (void) { Default_Handler(); }        	    	/* TIM4 global interrupt                            */
  800047e:	b580      	push	{r7, lr}
  8000480:	af00      	add	r7, sp, #0
- 8000482:	f7ff ff03 	bl	800028c <Default_Handler>
+ 8000482:	f7ff ff0f 	bl	80002a4 <Default_Handler>
  8000486:	bf00      	nop
  8000488:	bd80      	pop	{r7, pc}
 
-0800048a <I2C2_EV_IRQHandler>:
-__attribute__((weak)) void I2C2_EV_IRQHandler (void) { Default_Handler(); }      			/* I2C2 event interrupt                             */
+0800048a <I2C1_EV_IRQHandler>:
+__attribute__((weak)) void I2C1_EV_IRQHandler (void) { Default_Handler(); }      			/* I2C1 event interrupt                             */
  800048a:	b580      	push	{r7, lr}
  800048c:	af00      	add	r7, sp, #0
- 800048e:	f7ff fefd 	bl	800028c <Default_Handler>
+ 800048e:	f7ff ff09 	bl	80002a4 <Default_Handler>
  8000492:	bf00      	nop
  8000494:	bd80      	pop	{r7, pc}
 
-08000496 <I2C2_ER_IRQHandler>:
-__attribute__((weak)) void I2C2_ER_IRQHandler (void) { Default_Handler(); }      			/* I2C2 error interrupt                             */
+08000496 <I2C1_ER_IRQHandler>:
+__attribute__((weak)) void I2C1_ER_IRQHandler (void) { Default_Handler(); }      			/* I2C1 error interrupt                             */
  8000496:	b580      	push	{r7, lr}
  8000498:	af00      	add	r7, sp, #0
- 800049a:	f7ff fef7 	bl	800028c <Default_Handler>
+ 800049a:	f7ff ff03 	bl	80002a4 <Default_Handler>
  800049e:	bf00      	nop
  80004a0:	bd80      	pop	{r7, pc}
 
-080004a2 <SPI1_IRQHandler>:
-__attribute__((weak)) void SPI1_IRQHandler (void) { Default_Handler(); }         			/* SPI1 global interrupt                            */
+080004a2 <I2C2_EV_IRQHandler>:
+__attribute__((weak)) void I2C2_EV_IRQHandler (void) { Default_Handler(); }      			/* I2C2 event interrupt                             */
  80004a2:	b580      	push	{r7, lr}
  80004a4:	af00      	add	r7, sp, #0
- 80004a6:	f7ff fef1 	bl	800028c <Default_Handler>
+ 80004a6:	f7ff fefd 	bl	80002a4 <Default_Handler>
  80004aa:	bf00      	nop
  80004ac:	bd80      	pop	{r7, pc}
 
-080004ae <SPI2_IRQHandler>:
-__attribute__((weak)) void SPI2_IRQHandler (void) { Default_Handler(); }         			/* SPI2 global interrupt                            */
+080004ae <I2C2_ER_IRQHandler>:
+__attribute__((weak)) void I2C2_ER_IRQHandler (void) { Default_Handler(); }      			/* I2C2 error interrupt                             */
  80004ae:	b580      	push	{r7, lr}
  80004b0:	af00      	add	r7, sp, #0
- 80004b2:	f7ff feeb 	bl	800028c <Default_Handler>
+ 80004b2:	f7ff fef7 	bl	80002a4 <Default_Handler>
  80004b6:	bf00      	nop
  80004b8:	bd80      	pop	{r7, pc}
 
-080004ba <USART1_IRQHandler>:
-__attribute__((weak)) void USART1_IRQHandler (void) { Default_Handler(); }        			/* USART1 global interrupt                          */
+080004ba <SPI1_IRQHandler>:
+__attribute__((weak)) void SPI1_IRQHandler (void) { Default_Handler(); }         			/* SPI1 global interrupt                            */
  80004ba:	b580      	push	{r7, lr}
  80004bc:	af00      	add	r7, sp, #0
- 80004be:	f7ff fee5 	bl	800028c <Default_Handler>
+ 80004be:	f7ff fef1 	bl	80002a4 <Default_Handler>
  80004c2:	bf00      	nop
  80004c4:	bd80      	pop	{r7, pc}
 
-080004c6 <USART2_IRQHandler>:
-__attribute__((weak)) void USART2_IRQHandler (void) { Default_Handler(); }       			/* USART2 global interrupt                          */
+080004c6 <SPI2_IRQHandler>:
+__attribute__((weak)) void SPI2_IRQHandler (void) { Default_Handler(); }         			/* SPI2 global interrupt                            */
  80004c6:	b580      	push	{r7, lr}
  80004c8:	af00      	add	r7, sp, #0
- 80004ca:	f7ff fedf 	bl	800028c <Default_Handler>
+ 80004ca:	f7ff feeb 	bl	80002a4 <Default_Handler>
  80004ce:	bf00      	nop
  80004d0:	bd80      	pop	{r7, pc}
 
-080004d2 <USART3_IRQHandler>:
-__attribute__((weak)) void USART3_IRQHandler (void) { Default_Handler(); }       			/* USART3 global interrupt                          */
+080004d2 <USART1_IRQHandler>:
+__attribute__((weak)) void USART1_IRQHandler (void) { Default_Handler(); }        			/* USART1 global interrupt                          */
  80004d2:	b580      	push	{r7, lr}
  80004d4:	af00      	add	r7, sp, #0
- 80004d6:	f7ff fed9 	bl	800028c <Default_Handler>
+ 80004d6:	f7ff fee5 	bl	80002a4 <Default_Handler>
  80004da:	bf00      	nop
  80004dc:	bd80      	pop	{r7, pc}
 
-080004de <EXTI15_10_IRQHandler>:
-__attribute__((weak)) void EXTI15_10_IRQHandler (void) { Default_Handler(); }    			/* EXTI Line[15:10] interrupts                      */
+080004de <USART2_IRQHandler>:
+__attribute__((weak)) void USART2_IRQHandler (void) { Default_Handler(); }       			/* USART2 global interrupt                          */
  80004de:	b580      	push	{r7, lr}
  80004e0:	af00      	add	r7, sp, #0
- 80004e2:	f7ff fed3 	bl	800028c <Default_Handler>
+ 80004e2:	f7ff fedf 	bl	80002a4 <Default_Handler>
  80004e6:	bf00      	nop
  80004e8:	bd80      	pop	{r7, pc}
 
-080004ea <RTCAlarm_IRQHandler>:
-__attribute__((weak)) void RTCAlarm_IRQHandler (void) { Default_Handler(); }     			/* RTC Alarms through EXTI line interrupt           */
+080004ea <USART3_IRQHandler>:
+__attribute__((weak)) void USART3_IRQHandler (void) { Default_Handler(); }       			/* USART3 global interrupt                          */
  80004ea:	b580      	push	{r7, lr}
  80004ec:	af00      	add	r7, sp, #0
- 80004ee:	f7ff fecd 	bl	800028c <Default_Handler>
+ 80004ee:	f7ff fed9 	bl	80002a4 <Default_Handler>
  80004f2:	bf00      	nop
  80004f4:	bd80      	pop	{r7, pc}
 
-080004f6 <TIM8_BRK_IRQHandler>:
-__attribute__((weak)) void TIM8_BRK_IRQHandler (void) { Default_Handler(); }     			/* TIM8 Break interrupt                             */
+080004f6 <EXTI15_10_IRQHandler>:
+__attribute__((weak)) void EXTI15_10_IRQHandler (void) { Default_Handler(); }    			/* EXTI Line[15:10] interrupts                      */
  80004f6:	b580      	push	{r7, lr}
  80004f8:	af00      	add	r7, sp, #0
- 80004fa:	f7ff fec7 	bl	800028c <Default_Handler>
+ 80004fa:	f7ff fed3 	bl	80002a4 <Default_Handler>
  80004fe:	bf00      	nop
  8000500:	bd80      	pop	{r7, pc}
 
-08000502 <TIM8_UP_IRQHandler>:
-__attribute__((weak)) void TIM8_UP_IRQHandler (void) { Default_Handler(); }      			/* TIM8 Update interrupt                            */
+08000502 <RTCAlarm_IRQHandler>:
+__attribute__((weak)) void RTCAlarm_IRQHandler (void) { Default_Handler(); }     			/* RTC Alarms through EXTI line interrupt           */
  8000502:	b580      	push	{r7, lr}
  8000504:	af00      	add	r7, sp, #0
- 8000506:	f7ff fec1 	bl	800028c <Default_Handler>
+ 8000506:	f7ff fecd 	bl	80002a4 <Default_Handler>
  800050a:	bf00      	nop
  800050c:	bd80      	pop	{r7, pc}
 
-0800050e <TIM8_TRG_COM_IRQHandler>:
-__attribute__((weak)) void TIM8_TRG_COM_IRQHandler (void) { Default_Handler(); } 			/* TIM8 Trigger and Commutation interrupts          */
+0800050e <TIM8_BRK_IRQHandler>:
+__attribute__((weak)) void TIM8_BRK_IRQHandler (void) { Default_Handler(); }     			/* TIM8 Break interrupt                             */
  800050e:	b580      	push	{r7, lr}
  8000510:	af00      	add	r7, sp, #0
- 8000512:	f7ff febb 	bl	800028c <Default_Handler>
+ 8000512:	f7ff fec7 	bl	80002a4 <Default_Handler>
  8000516:	bf00      	nop
  8000518:	bd80      	pop	{r7, pc}
 
-0800051a <TIM8_CC_IRQHandler>:
-__attribute__((weak)) void TIM8_CC_IRQHandler (void) { Default_Handler(); }      			/* TIM8 Capture Compare interrupt                   */
+0800051a <TIM8_UP_IRQHandler>:
+__attribute__((weak)) void TIM8_UP_IRQHandler (void) { Default_Handler(); }      			/* TIM8 Update interrupt                            */
  800051a:	b580      	push	{r7, lr}
  800051c:	af00      	add	r7, sp, #0
- 800051e:	f7ff feb5 	bl	800028c <Default_Handler>
+ 800051e:	f7ff fec1 	bl	80002a4 <Default_Handler>
  8000522:	bf00      	nop
  8000524:	bd80      	pop	{r7, pc}
 
-08000526 <ADC3_IRQHandler>:
-__attribute__((weak)) void ADC3_IRQHandler (void) { Default_Handler(); }         			/* ADC3 global interrupt                            */
+08000526 <TIM8_TRG_COM_IRQHandler>:
+__attribute__((weak)) void TIM8_TRG_COM_IRQHandler (void) { Default_Handler(); } 			/* TIM8 Trigger and Commutation interrupts          */
  8000526:	b580      	push	{r7, lr}
  8000528:	af00      	add	r7, sp, #0
- 800052a:	f7ff feaf 	bl	800028c <Default_Handler>
+ 800052a:	f7ff febb 	bl	80002a4 <Default_Handler>
  800052e:	bf00      	nop
  8000530:	bd80      	pop	{r7, pc}
 
-08000532 <FSMC_IRQHandler>:
-__attribute__((weak)) void FSMC_IRQHandler (void) { Default_Handler(); }         			/* FSMC global interrupt                            */
+08000532 <TIM8_CC_IRQHandler>:
+__attribute__((weak)) void TIM8_CC_IRQHandler (void) { Default_Handler(); }      			/* TIM8 Capture Compare interrupt                   */
  8000532:	b580      	push	{r7, lr}
  8000534:	af00      	add	r7, sp, #0
- 8000536:	f7ff fea9 	bl	800028c <Default_Handler>
+ 8000536:	f7ff feb5 	bl	80002a4 <Default_Handler>
  800053a:	bf00      	nop
  800053c:	bd80      	pop	{r7, pc}
 
-0800053e <SDIO_IRQHandler>:
-__attribute__((weak)) void SDIO_IRQHandler (void) { Default_Handler(); }         			/* SDIO global interrupt                            */
+0800053e <ADC3_IRQHandler>:
+__attribute__((weak)) void ADC3_IRQHandler (void) { Default_Handler(); }         			/* ADC3 global interrupt                            */
  800053e:	b580      	push	{r7, lr}
  8000540:	af00      	add	r7, sp, #0
- 8000542:	f7ff fea3 	bl	800028c <Default_Handler>
+ 8000542:	f7ff feaf 	bl	80002a4 <Default_Handler>
  8000546:	bf00      	nop
  8000548:	bd80      	pop	{r7, pc}
 
-0800054a <TIM5_IRQHandler>:
-__attribute__((weak)) void TIM5_IRQHandler (void) { Default_Handler(); }         			/* TIM5 global interrupt                            */
+0800054a <FSMC_IRQHandler>:
+__attribute__((weak)) void FSMC_IRQHandler (void) { Default_Handler(); }         			/* FSMC global interrupt                            */
  800054a:	b580      	push	{r7, lr}
  800054c:	af00      	add	r7, sp, #0
- 800054e:	f7ff fe9d 	bl	800028c <Default_Handler>
+ 800054e:	f7ff fea9 	bl	80002a4 <Default_Handler>
  8000552:	bf00      	nop
  8000554:	bd80      	pop	{r7, pc}
 
-08000556 <SPI3_IRQHandler>:
-__attribute__((weak)) void SPI3_IRQHandler (void) { Default_Handler(); }         			/* SPI3 global interrupt                            */
+08000556 <SDIO_IRQHandler>:
+__attribute__((weak)) void SDIO_IRQHandler (void) { Default_Handler(); }         			/* SDIO global interrupt                            */
  8000556:	b580      	push	{r7, lr}
  8000558:	af00      	add	r7, sp, #0
- 800055a:	f7ff fe97 	bl	800028c <Default_Handler>
+ 800055a:	f7ff fea3 	bl	80002a4 <Default_Handler>
  800055e:	bf00      	nop
  8000560:	bd80      	pop	{r7, pc}
 
-08000562 <UART4_IRQHandler>:
-__attribute__((weak)) void UART4_IRQHandler (void) { Default_Handler(); }        			/* UART4 global interrupt                           */
+08000562 <TIM5_IRQHandler>:
+__attribute__((weak)) void TIM5_IRQHandler (void) { Default_Handler(); }         			/* TIM5 global interrupt                            */
  8000562:	b580      	push	{r7, lr}
  8000564:	af00      	add	r7, sp, #0
- 8000566:	f7ff fe91 	bl	800028c <Default_Handler>
+ 8000566:	f7ff fe9d 	bl	80002a4 <Default_Handler>
  800056a:	bf00      	nop
  800056c:	bd80      	pop	{r7, pc}
 
-0800056e <UART5_IRQHandler>:
-__attribute__((weak)) void UART5_IRQHandler (void) { Default_Handler(); }        			/* UART5 global interrupt                           */
+0800056e <SPI3_IRQHandler>:
+__attribute__((weak)) void SPI3_IRQHandler (void) { Default_Handler(); }         			/* SPI3 global interrupt                            */
  800056e:	b580      	push	{r7, lr}
  8000570:	af00      	add	r7, sp, #0
- 8000572:	f7ff fe8b 	bl	800028c <Default_Handler>
+ 8000572:	f7ff fe97 	bl	80002a4 <Default_Handler>
  8000576:	bf00      	nop
  8000578:	bd80      	pop	{r7, pc}
 
-0800057a <TIM6_IRQHandler>:
-__attribute__((weak)) void TIM6_IRQHandler (void) { Default_Handler(); }         			/* TIM6 global interrupt                            */
+0800057a <UART4_IRQHandler>:
+__attribute__((weak)) void UART4_IRQHandler (void) { Default_Handler(); }        			/* UART4 global interrupt                           */
  800057a:	b580      	push	{r7, lr}
  800057c:	af00      	add	r7, sp, #0
- 800057e:	f7ff fe85 	bl	800028c <Default_Handler>
+ 800057e:	f7ff fe91 	bl	80002a4 <Default_Handler>
  8000582:	bf00      	nop
  8000584:	bd80      	pop	{r7, pc}
 
-08000586 <TIM7_IRQHandler>:
-__attribute__((weak)) void TIM7_IRQHandler (void) { Default_Handler(); }         			/* TIM7 global interrupt                            */
+08000586 <UART5_IRQHandler>:
+__attribute__((weak)) void UART5_IRQHandler (void) { Default_Handler(); }        			/* UART5 global interrupt                           */
  8000586:	b580      	push	{r7, lr}
  8000588:	af00      	add	r7, sp, #0
- 800058a:	f7ff fe7f 	bl	800028c <Default_Handler>
+ 800058a:	f7ff fe8b 	bl	80002a4 <Default_Handler>
  800058e:	bf00      	nop
  8000590:	bd80      	pop	{r7, pc}
 
-08000592 <DMA2_Channel1_IRQHandler>:
-__attribute__((weak)) void DMA2_Channel1_IRQHandler (void) { Default_Handler(); }			/* DMA2 Channel1 global interrupt                   */
+08000592 <TIM6_IRQHandler>:
+__attribute__((weak)) void TIM6_IRQHandler (void) { Default_Handler(); }         			/* TIM6 global interrupt                            */
  8000592:	b580      	push	{r7, lr}
  8000594:	af00      	add	r7, sp, #0
- 8000596:	f7ff fe79 	bl	800028c <Default_Handler>
+ 8000596:	f7ff fe85 	bl	80002a4 <Default_Handler>
  800059a:	bf00      	nop
  800059c:	bd80      	pop	{r7, pc}
 
-0800059e <DMA2_Channel2_IRQHandler>:
-__attribute__((weak)) void DMA2_Channel2_IRQHandler (void) { Default_Handler(); }			/* DMA2 Channel2 global interrupt                   */
+0800059e <TIM7_IRQHandler>:
+__attribute__((weak)) void TIM7_IRQHandler (void) { Default_Handler(); }         			/* TIM7 global interrupt                            */
  800059e:	b580      	push	{r7, lr}
  80005a0:	af00      	add	r7, sp, #0
- 80005a2:	f7ff fe73 	bl	800028c <Default_Handler>
+ 80005a2:	f7ff fe7f 	bl	80002a4 <Default_Handler>
  80005a6:	bf00      	nop
  80005a8:	bd80      	pop	{r7, pc}
 
-080005aa <DMA2_Channel3_IRQHandler>:
-__attribute__((weak)) void DMA2_Channel3_IRQHandler (void) { Default_Handler(); }			/* DMA2 Channel3 global interrupt                   */
+080005aa <DMA2_Channel1_IRQHandler>:
+__attribute__((weak)) void DMA2_Channel1_IRQHandler (void) { Default_Handler(); }			/* DMA2 Channel1 global interrupt                   */
  80005aa:	b580      	push	{r7, lr}
  80005ac:	af00      	add	r7, sp, #0
- 80005ae:	f7ff fe6d 	bl	800028c <Default_Handler>
+ 80005ae:	f7ff fe79 	bl	80002a4 <Default_Handler>
  80005b2:	bf00      	nop
  80005b4:	bd80      	pop	{r7, pc}
 
-080005b6 <DMA2_Channel4_5_IRQHandler>:
-__attribute__((weak)) void DMA2_Channel4_5_IRQHandler (void) { Default_Handler(); }			/* DMA2 Channel4 and DMA2 Channel5 global interrupt */
+080005b6 <DMA2_Channel2_IRQHandler>:
+__attribute__((weak)) void DMA2_Channel2_IRQHandler (void) { Default_Handler(); }			/* DMA2 Channel2 global interrupt                   */
  80005b6:	b580      	push	{r7, lr}
  80005b8:	af00      	add	r7, sp, #0
- 80005ba:	f7ff fe67 	bl	800028c <Default_Handler>
+ 80005ba:	f7ff fe73 	bl	80002a4 <Default_Handler>
  80005be:	bf00      	nop
  80005c0:	bd80      	pop	{r7, pc}
+
+080005c2 <DMA2_Channel3_IRQHandler>:
+__attribute__((weak)) void DMA2_Channel3_IRQHandler (void) { Default_Handler(); }			/* DMA2 Channel3 global interrupt                   */
+ 80005c2:	b580      	push	{r7, lr}
+ 80005c4:	af00      	add	r7, sp, #0
+ 80005c6:	f7ff fe6d 	bl	80002a4 <Default_Handler>
+ 80005ca:	bf00      	nop
+ 80005cc:	bd80      	pop	{r7, pc}
+
+080005ce <DMA2_Channel4_5_IRQHandler>:
+__attribute__((weak)) void DMA2_Channel4_5_IRQHandler (void) { Default_Handler(); }			/* DMA2 Channel4 and DMA2 Channel5 global interrupt */
+ 80005ce:	b580      	push	{r7, lr}
+ 80005d0:	af00      	add	r7, sp, #0
+ 80005d2:	f7ff fe67 	bl	80002a4 <Default_Handler>
+ 80005d6:	bf00      	nop
+ 80005d8:	bd80      	pop	{r7, pc}
 	...
 
 Disassembly of section .init:
 
-080005c4 <_init>:
- 80005c4:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
- 80005c6:	bf00      	nop
+080005dc <_init>:
+ 80005dc:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 80005de:	bf00      	nop
 
 Disassembly of section .fini:
 
-080005c8 <_fini>:
- 80005c8:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
- 80005ca:	bf00      	nop
+080005e0 <_fini>:
+ 80005e0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 80005e2:	bf00      	nop
