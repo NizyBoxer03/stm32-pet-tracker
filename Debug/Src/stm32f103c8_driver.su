@@ -1,0 +1,4 @@
+stm32f103c8_driver.c:4:6:SystemInit	8	static
+stm32f103c8_driver.c:16:5:bitWrite	32	static
+stm32f103c8_driver.c:38:6:blockWrite	24	static
+stm32f103c8_driver.c:44:6:UARTConf	16	static
