@@ -492,75 +492,78 @@ void ParseGPSSentence(uint8_t *str, uint8_t *src, GPS_DATA* gps) //Funciona inde
 			char *param;
 			int counter = 0;
 
-			/* get the first param */
+
 			param = strtok(str, s);
 			//$GPRMC
 
 			param = strtok(NULL, s);
 
-			/* walk through other params */
-			while( param != NULL ) {
+			if(*param != 'V')
+			{
+				while( param != NULL ) {
 
-				switch(counter)
-				{
-					case 0: //UTC of pos (HHMMSS.SS)
-						sscanf(param, "%2d%2d%f", &gps->hour, &gps->minute, &gps->second);
-						break;
+					switch(counter)
+					{
+						case 0: //UTC of pos (HHMMSS.SS)
+							sscanf(param, "%2d%2d%f", &gps->hour, &gps->minute, &gps->second);
+							break;
 
-					case 1: //Validity (A/V)
-						sscanf(param, "%c", &gps->valid);
-						break;
+						case 1: //Validity (A/V)
+							sscanf(param, "%c", &gps->valid);
+							break;
 
-					case 2: //lat (DDmm.mm)
-						sscanf(param, "%2d%f", &gps->latdeg, &gps->latmin);
-						break;
+						case 2: //lat (DDmm.mm)
+							sscanf(param, "%2d%f", &gps->latdeg, &gps->latmin);
+							break;
 
-					case 3: //lat dir (S/N)
-						sscanf(param, "%c", &gps->latdir);
-						break;
+						case 3: //lat dir (S/N)
+							sscanf(param, "%c", &gps->latdir);
+							break;
 
-					case 4: //long (DDDmm.mm)
-						sscanf(param, "%3d%f", &gps->longdeg, &gps->longmin);
-						break;
+						case 4: //long (DDDmm.mm)
+							sscanf(param, "%3d%f", &gps->longdeg, &gps->longmin);
+							break;
 
-					case 5: //long dir (W/E)
-						sscanf(param, "%c", &gps->longdir);
-						break;
+						case 5: //long dir (W/E)
+							sscanf(param, "%c", &gps->longdir);
+							break;
 
-					case 6: //speed (knots) (x.x)
-						sscanf(param, "%f", &gps->speed);
-						break;
+						case 6: //speed (knots) (x.x)
+							sscanf(param, "%f", &gps->speed);
+							break;
 
-					case 7: //track true (?) (x.x)
-						sscanf(param, "%f", &gps->tracktrue);
-						break;
+						case 7: //track true (?) (x.x)
+							sscanf(param, "%f", &gps->tracktrue);
+							break;
 
-					case 8: //date (DDMMYY)
-						sscanf(param, "%2d%2d%2d", &gps->day, &gps->month, &gps->year);
-						break;
+						case 8: //date (DDMMYY)
+							sscanf(param, "%2d%2d%2d", &gps->day, &gps->month, &gps->year);
+							break;
 
-					case 9: //mag var (deg) (x.x)
-						sscanf(param, "%f", &gps->magvar);
-						break;
+						case 9: //mag var (deg) (x.x)
+							sscanf(param, "%f", &gps->magvar);
+							break;
 
-					case 10: //mag var dir (E/W) (sub/add)
-						sscanf(param, "%c", &gps->magvardir);
-						break;
+						case 10: //mag var dir (E/W) (sub/add)
+							sscanf(param, "%c", &gps->magvardir);
+							break;
 
-					case 11: //mode ind (single char, see table)
-						sscanf(param, "%c", &gps->mode);
-						break;
+						case 11: //mode ind (single char, see table)
+							sscanf(param, "%c", &gps->mode);
+							break;
 
-					case 12: //Checksum
-						sscanf(param, "%x", &gps->checksum);
-						break;
+						case 12: //Checksum
+							sscanf(param, "%x", &gps->checksum);
+							break;
+					}
+
+					param = strtok(NULL, s);
+
+
+					counter++;
 				}
-
-				param = strtok(NULL, s);
-
-
-				counter++;
 			}
+
 		}
 
 
