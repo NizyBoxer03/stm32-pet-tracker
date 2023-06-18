@@ -36,6 +36,8 @@
 /* USER CODE BEGIN PD */
 #define NMEA0183_MAX_LENGTH 82
 #define BUF_SIZE 512
+
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -71,7 +73,9 @@ typedef struct
 
 GPS_DATA GPS;
 
-uint8_t sentence[NMEA0183_MAX_LENGTH];
+void ParseGPSSentence(uint8_t*, uint8_t*, GPS_DATA*); //This shouldn't go here but uhhhhhhhhhh
+
+uint8_t sentence[NMEA0183_MAX_LENGTH + 1];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -148,16 +152,12 @@ int main(void)
 	/* USER CODE BEGIN WHILE */
 	while (1)
 	{
+		ParseGPSSentence(&sentence, &data_rx2, &GPS); //Should work, at least in theory. I haven't tested it yet, gimme a break
+	}
 		/* USER CODE END WHILE */
 
 		/* USER CODE BEGIN 3 */
-		//HAL_UART_Transmit_DMA(&huart2, ATCommand, strlen((char*)ATCommand));
 
-		memset(data_tx, '\0', 1);
-
-		HAL_Delay(1000);
-
-	}
 	/* USER CODE END 3 */
 }
 
@@ -488,14 +488,13 @@ void ParseGPSSentence(uint8_t *str, uint8_t *src, GPS_DATA* gps) //Funciona inde
 			int counter = 0;
 			char *param;
 
-			param = strtok((char*)str, s);
-			//$GPRMC
+			param = strtok((char*)str, s); //$GPRMC, we do nothing with it
 
-			param = strtok(NULL, s);
+			param = strtok(NULL, s); //Restart
 
-			if(*param != 'V')
+			if(*param != 'V') //The logic behind this statement is that if the GPS fails to find signal, all substrings except this one will be empty, and will therefore be the only thing inside of the buffer, aside from the header and the checksum
 			{
-				while( param != NULL ) {
+				while(param != NULL) {
 
 					switch(counter)
 					{
