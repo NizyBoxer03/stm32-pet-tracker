@@ -444,7 +444,7 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 	if (huart->Instance == USART1)
 	{
 		/* start the DMA again */
-		char *term = strchr(data_rx1, '\n');
+		//char *term = strchr(data_rx1, '\n');
 
 		//memcpy (data_tx, data_rx1, Size);
 
@@ -458,7 +458,7 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 	if (huart->Instance == USART2)
 	{
 		/* start the DMA again */
-		char *term = strchr(data_rx2, '\n');
+		//char *term = strchr(data_rx2, '\n');
 		memcpy (data_tx, data_rx2, Size);
 
 		HAL_UARTEx_ReceiveToIdle_DMA(&huart2, (uint8_t *) data_rx2, 50);
@@ -471,14 +471,10 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 
 void ParseGPSSentence(uint8_t *str, uint8_t *src, GPS_DATA* gps) //Funciona independientemente del método de buffer que terminemos usando
 {
-	int lastSPos = -1; //Esto es necesario?
-	char *param;
-
 	for(int i = 0; i < BUF_SIZE; i++)
 	{
 		if(src[i] == '$')
 		{
-			lastSPos = i;
 			for(int len = 0; src[i] == 0xD || len < NMEA0183_MAX_LENGTH; len++) //0xD = CR
 			{
 				str[len] = src[i]; //Copiar la línea del buffer al string que va a ser parseado
@@ -486,14 +482,13 @@ void ParseGPSSentence(uint8_t *str, uint8_t *src, GPS_DATA* gps) //Funciona inde
 		}
 
 		//En este punto str ya debería contener una línea parseable
-		if(str[3] == 'R' && str[4] == 'M' && str[5] == 'C') //Hackazo para detectar GGA
+		if(strstr((char*)str, "RMC") != NULL) //Detecto RMC
 		{
 			const char s[3] = ",*";
-			char *param;
 			int counter = 0;
+			char *param;
 
-
-			param = strtok(str, s);
+			param = strtok((char*)str, s);
 			//$GPRMC
 
 			param = strtok(NULL, s);

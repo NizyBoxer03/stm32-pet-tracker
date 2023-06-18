@@ -8,5 +8,5 @@ main.c:369:13:MX_USART3_UART_Init	2
 main.c:400:13:MX_DMA_Init	1
 main.c:427:13:MX_GPIO_Init	1
 main.c:442:6:HAL_UARTEx_RxEventCallback	3
-main.c:472:6:ParseGPSSentence	23
-main.c:579:6:Error_Handler	1
+main.c:472:6:ParseGPSSentence	21
+main.c:574:6:Error_Handler	1
