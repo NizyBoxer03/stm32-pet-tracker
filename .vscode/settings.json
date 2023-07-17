@@ -1,5 +1,8 @@
 {
     "files.associations": {
-        "sim800l.h": "c"
+        "sim800l.h": "c",
+        "stdint.h": "c",
+        "stm32f1xx_hal.h": "c",
+        "sim800l_r": "cpp"
     }
 }

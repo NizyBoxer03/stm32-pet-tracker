@@ -1,0 +1,6 @@
+main.c:251:6:SystemClock_Config	4
+main.c:106:5:main	19
+main.c:470:10:VoltageToPercentage	2
+main.c:477:6:RTC_Sleep	3
+main.c:516:6:HAL_RTC_AlarmAEventCallback	2
+main.c:542:6:Error_Handler	1

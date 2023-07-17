@@ -1,0 +1,7 @@
+../Core/Src/sim800l.c:51:6:SIM800L_Reset	24	static
+../Core/Src/sim800l.c:60:9:SIM800L_BatteryCheck	24	static
+../Core/Src/sim800l.c:138:9:SIM800L_SendSMS	32	static
+../Core/Src/sim800l.c:238:9:SIM800L_WEBUpdate	32	static
+../Core/Src/sim800l.c:358:6:SIM800L_Sleep	24	static
+../Core/Src/sim800l.c:367:6:SIM800L_Wakeup	16	static
+../Core/Src/sim800l.c:378:9:SIM800L_CheckResponse	16	static

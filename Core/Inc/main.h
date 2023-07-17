@@ -53,12 +53,23 @@ extern "C" {
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
+uint16_t VoltageToPercentage(uint16_t);
+void RTC_Sleep(uint8_t);
 
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
 
 /* USER CODE BEGIN Private defines */
+#define GPS_UPDATE 0
+#define WEB_UPDATE 1
+#define BAT_UPDATE 2
+#define A_MIMIR 3
+#define AYUDAME_LOCOOOOOOOOOO 4
+
+#define BAT_CHECK 0
+#define BAT_UPLOAD 1
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

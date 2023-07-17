@@ -1,0 +1,4 @@
+../Core/Src/nmea.c:3:9:ParseGPRMC	120	static
+../Core/Src/nmea.c:87:9:CalculateChecksum	24	static
+../Core/Src/nmea.c:101:6:BuildGPSCoord	24	static
+../Core/Src/nmea.c:108:7:strtok_new	24	static

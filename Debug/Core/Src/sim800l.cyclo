@@ -1,4 +1,7 @@
-sim800l.c:31:6:SIM800L_Init	2
-sim800l.c:38:6:SIM800L_CheckStatus	2
-sim800l.c:45:6:SIM800L_SMSConfig	2
-sim800l.c:52:6:SIM800L_SendMessage	2
+sim800l.c:51:6:SIM800L_Reset	2
+sim800l.c:60:9:SIM800L_BatteryCheck	14
+sim800l.c:138:9:SIM800L_SendSMS	18
+sim800l.c:238:9:SIM800L_WEBUpdate	21
+sim800l.c:358:6:SIM800L_Sleep	1
+sim800l.c:367:6:SIM800L_Wakeup	2
+sim800l.c:378:9:SIM800L_CheckResponse	4
